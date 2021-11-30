@@ -5,6 +5,14 @@ function App() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const parseJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  };
+
     async function loginUser(event) {
       event.preventDefault()
       
@@ -22,6 +30,8 @@ function App() {
 
       const data = await response.json();
       if(data.user){
+        console.log(parseJwt(data.user))
+        localStorage.setItem('username', parseJwt(data.user).name)
         localStorage.setItem('token', data.user)
         alert('Login successful')
         window.location.href= '/dashboard'
