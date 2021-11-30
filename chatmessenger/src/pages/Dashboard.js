@@ -1,7 +1,6 @@
 import React, { useEffect, useState} from 'react'
 import jwt from 'jsonwebtoken'
-import { useNavigate} from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
   
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -59,9 +58,31 @@ const Dashboard = () => {
         }
     }
 
+    async function deleteAccount(event) {
+        event.preventDefault()
+
+        const req = await fetch('http://localhost:1337/api/delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',                
+                'x-access-token': localStorage.getItem('token'),
+            },
+        })
+
+        const data = await req.json()
+        if(data.status === 'ok') {
+            alert('Profile Deleted')
+            navigate('/')
+        } else {
+            alert(data.error)
+        }
+    }
+
+
     return (
         <div>
-            
+            <h1>Hello, {localStorage.getItem('username')}!! :)</h1>
+            <button onClick={deleteAccount}>Delete your profile</button>
         </div>
     )
 }
