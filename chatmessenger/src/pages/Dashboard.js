@@ -1,11 +1,16 @@
 import React, { useEffect, useState} from 'react'
 import jwt from 'jsonwebtoken'
 import { useNavigate } from 'react-router-dom'
+import { parseJwt } from '../utils/utils'
   
 const Dashboard = () => {
     const navigate = useNavigate()
     const [quote, setQuote] = useState('')
     const [tempQuote, setTempQuote] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [name, setName] = useState('')
+    // const [username, setUsername] = useState(localStorage.getItem('username')) 
 
     async function populateQuote() {
         const req = await fetch('http://localhost:1337/api/quote', {
@@ -34,7 +39,7 @@ const Dashboard = () => {
                 }
         }
     }, [navigate])
-
+// Quote Functionality -------------------------------------------------------
     async function updateQuote(event) {
         event.preventDefault()
 
@@ -57,7 +62,7 @@ const Dashboard = () => {
             alert(data.error)
         }
     }
-
+// Delete Account ------------------------------------------------------------
     async function deleteAccount(event) {
         event.preventDefault()
 
@@ -71,8 +76,42 @@ const Dashboard = () => {
 
         const data = await req.json()
         if(data.status === 'ok') {
-            alert('Profile Deleted')
+            alert('Profile Updated')
             navigate('/')
+        } else {
+            alert(data.error)
+        }
+    }
+// Update Account ------------------------------------------------------------
+    async function updateAccount(event) {
+        event.preventDefault()
+        console.log({
+            name: name,
+            email: email, 
+            password: password, 
+            id: parseJwt(localStorage.getItem('token')).id,
+        })
+        const req = await fetch('http://localhost:1337/api/update', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',                
+                'x-access-token': localStorage.getItem('token'),
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email, 
+                password: password, 
+                id: parseJwt(localStorage.getItem('token')).id,
+            }),
+        })
+
+        const data = await req.json()
+        if(data.status === 'ok') {
+            localStorage.setItem('username', parseJwt(data.user).name)
+            // setUsername(parseJwt(data.user).name)
+            localStorage.setItem('token', data.user)
+            alert('Profile Updated')
+            navigate('/dashboard')
         } else {
             alert(data.error)
         }
@@ -81,8 +120,40 @@ const Dashboard = () => {
 
     return (
         <div>
-            <h1>Hello, {localStorage.getItem('username')}!! :)</h1>
+            <h1>Hello, {'Doctor Zayus'}!! :)</h1>
             <button onClick={deleteAccount}>Delete your profile</button>
+            <h1>Update Account</h1>
+            <form onSubmit={updateAccount}>
+            <input 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                placeholder="Name" 
+            />
+            <br/>
+            <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="Email"
+            />
+            <br/>
+            <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="Password"
+            />
+            <br/>
+            <input type="submit" value="update"/>
+          </form>
+          <br/>
+          <br/>
+          <input
+          type="search"
+          placeholder="Search"
+          name="searchTerm"
+          ></input>
         </div>
     )
 }

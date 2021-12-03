@@ -4,19 +4,17 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
 const jwt = require('jsonwebtoken')
-const loginRouter = require('./Routes/loginRouter')
-const registerRouter = require('./Routes/registerRouter')
-
+const userRouter = require('./Routes/userRouter')
 
 app.use(cors())
 app.use(express.json())
 
 mongoose.connect('mongodb://localhost:27017/mern_assignment')
 
-registerRouter(app)
+userRouter.loginRouter(app)
+userRouter.registerRouter(app)
 
-loginRouter(app)
-
+// Delete Profile 
 app.delete('/api/delete', async (req, res) => {
     const token = req.headers['x-access-token']
 
@@ -32,6 +30,30 @@ app.delete('/api/delete', async (req, res) => {
     }
 })
 
+// Update Profile 
+app.patch('/api/update', async (req, res) => {
+    // Find the login user by id
+    const user = await User.findOne({_id: req.body.id});
+    console.log('here', req, user)
+    if (user) {
+        const newUser = {
+            name: req.body.name || user.name,
+            email: req.body.email || user.email,
+        }
+        if (req.body.password) {
+            newUser.password = req.body.password || user.password;
+        }
+
+        const updatedUser = await User.findOneAndUpdate(req.body.id, newUser);
+        console.log(updatedUser)
+        const token = jwt.sign({
+            name: updatedUser.name,
+            email: updatedUser.email,
+            id: updatedUser.id,
+        }, 'Secret1234!')
+        return res.json({status: 'ok', user: token})
+    }
+})
 
 app.get('/api/quote', async (req, res) => {    
 

@@ -1,17 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
+import { parseJwt } from '../utils/utils'
 
 function App() {
-  
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  const parseJwt = (token) => {
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch (e) {
-      return null;
-    }
-  };
 
     async function loginUser(event) {
       event.preventDefault()
@@ -40,9 +34,13 @@ function App() {
         alert('Please check your username and password')
       }
     }
+  function navToRegister(event){
+    navigate('/register')
+  }
 
   return (
     <div>
+      <h1>Log in</h1>
       <form onSubmit={loginUser}>
         <input
           value={email}
@@ -60,6 +58,7 @@ function App() {
         <br/>
         <input type="submit" value="Login"/>
       </form>
+      <h1>Not Signed Up <button onClick={navToRegister}>Reigster</button></h1>
     </div>
   );
 }

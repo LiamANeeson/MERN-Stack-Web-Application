@@ -11,7 +11,6 @@ import {
 
 function App() {
   const navigate = useNavigate()
-
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -60,6 +59,10 @@ function App() {
   }));
   
   const classes = useStyles();
+
+  function navToLogin(event){
+    navigate('/login')
+  }
   
   return (
     <div>
@@ -86,8 +89,9 @@ function App() {
             placeholder="Password"
           />
           <br/>
-          <input type="submit"/>
+            <input type="submit"/>
           </form>
+          <h1>Already a member<button onClick={navToLogin}>Log In</button></h1>
     </div>
   );
 }
