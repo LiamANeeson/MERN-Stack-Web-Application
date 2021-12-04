@@ -36,14 +36,6 @@ const createPost = async function (req, res){
 }
 
 const getPosts = async function (req, res) {
-    // let decoded = null
-    // try{
-    //     decoded = jwt.verify(req.headers['x-access-token'], 'Secret1234!')
-    // } catch(error) {
-    //     console.log(error)
-    //     return res.json({ status: 'error', error: 'invalid token'})
-    // }
-
     let allPosts = [];
 
     await Post.find().then(posts => {allPosts = posts})

@@ -158,12 +158,17 @@ const Dashboard = () => {
 
     //Get Posts
     const getPosts = () => {
-        axios.get('http://localhost:1337/api/posts')
-        .then(response => {
+        axios.get(
+            'http://localhost:1337/api/posts',
+            {
+                headers: {
+                    'Content-Type': 'application/json', 
+                }
+            }
+        ).then(response => {
             setPosts(response.data.posts)
             console.log('Data has been received!')
-        })
-        .catch(err => {
+        }).catch(err => {
             console.log(err)
             alert('Error retrieving data!!!')
         })
