@@ -229,6 +229,19 @@ const Dashboard = () => {
           <br/>
             <input type="submit" value="Create Post"/>
           </form>
+          <h1>Posts</h1>
+            {   // test?
+                posts.length
+                ? posts.map((post, index) => (
+                    <div key={post._id}>
+                        <h2 id="title">Title: {post.title} </h2>
+                        <h3 id="author">{post.author}</h3>
+                        <p>{post.text}</p>
+                    </div>
+                ))
+                : <h3>No posts to display</h3>
+            }
+          
         </div>
     )
 }
