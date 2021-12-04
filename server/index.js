@@ -1,10 +1,12 @@
 const express = require('express')
 const app = express()
+const bcrypt = require('bcryptjs')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
 const jwt = require('jsonwebtoken')
 const userRouter = require('./Routes/userRouter')
+const postRouter = require('./Routes/postRouter')
 
 app.use(cors())
 app.use(express.json())
@@ -13,6 +15,7 @@ mongoose.connect('mongodb://localhost:27017/mern_assignment')
 
 userRouter.loginRouter(app)
 userRouter.registerRouter(app)
+postRouter(app)
 
 // Delete Profile 
 app.delete('/api/delete', async (req, res) => {
@@ -34,17 +37,16 @@ app.delete('/api/delete', async (req, res) => {
 app.patch('/api/update', async (req, res) => {
     // Find the login user by id
     const user = await User.findOne({_id: req.body.id});
-    console.log('here', req, user)
     if (user) {
         const newUser = {
             name: req.body.name || user.name,
             email: req.body.email || user.email,
         }
-        if (req.body.password) {
-            newUser.password = req.body.password || user.password;
-        }
+        newUser.password = (
+            req.body.password ? await bcrypt.hash(req.body.password, 10) : user.password
+        )
 
-        const updatedUser = await User.findOneAndUpdate(req.body.id, newUser);
+        const updatedUser = await User.findOneAndUpdate({_id: req.body.id}, newUser);
         console.log(updatedUser)
         const token = jwt.sign({
             name: updatedUser.name,

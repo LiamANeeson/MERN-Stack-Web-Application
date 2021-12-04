@@ -10,7 +10,10 @@ const Dashboard = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
-    // const [username, setUsername] = useState(localStorage.getItem('username')) 
+    const [username, setUsername] = useState(localStorage.getItem('username'))
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [text, setText] = useState('')
 
     async function populateQuote() {
         const req = await fetch('http://localhost:1337/api/quote', {
@@ -108,7 +111,7 @@ const Dashboard = () => {
         const data = await req.json()
         if(data.status === 'ok') {
             localStorage.setItem('username', parseJwt(data.user).name)
-            // setUsername(parseJwt(data.user).name)
+            setUsername(parseJwt(data.user).name)
             localStorage.setItem('token', data.user)
             alert('Profile Updated')
             navigate('/dashboard')
@@ -117,10 +120,34 @@ const Dashboard = () => {
         }
     }
 
+    // Create a Post 
+    async function createPost(event) {
+        event.preventDefault()
+        
+        const response = await fetch('http://localhost:1337/api/post', {
+          method:'POST',
+          headers: {
+            'Content-Type': 'application/json', 
+            'x-access-token': localStorage.getItem('token'),
+          },
+          body: JSON.stringify({
+            title,
+            author,
+            text,
+            // userID,
+          }),
+        })
+  
+        const data = await response.json();
+        if(data.status === 'ok') {
+          alert("Post Success")
+        }
+      }
+
 
     return (
         <div>
-            <h1>Hello, {'Doctor Zayus'}!! :)</h1>
+            <h1>Hello, {username}!! :)</h1>
             <button onClick={deleteAccount}>Delete your profile</button>
             <h1>Update Account</h1>
             <form onSubmit={updateAccount}>
@@ -149,11 +176,31 @@ const Dashboard = () => {
           </form>
           <br/>
           <br/>
-          <input
+          {/* -----------------------Search---------------------------- */}
+          {/* <input
           type="search"
           placeholder="Search"
           name="searchTerm"
-          ></input>
+          ></input> */}
+          {/* -------------------Create Post-------------------- */}
+          <form onSubmit={createPost}>
+          <input 
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            type="title"
+            placeholder="Post Title" 
+          />
+          <br/>
+          <br/>
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            type="text"
+            placeholder="Insert Post Here"
+          />
+          <br/>
+            <input type="submit" value="Create Post"/>
+          </form>
         </div>
     )
 }
