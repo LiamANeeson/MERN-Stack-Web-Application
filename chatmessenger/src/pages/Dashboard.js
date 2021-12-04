@@ -2,6 +2,7 @@ import React, { useEffect, useState} from 'react'
 import jwt from 'jsonwebtoken'
 import { useNavigate } from 'react-router-dom'
 import { parseJwt } from '../utils/utils'
+import axios from 'axios'
   
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -14,6 +15,7 @@ const Dashboard = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [text, setText] = useState('')
+    const [posts, setPosts] = useState([])
 
     async function populateQuote() {
         const req = await fetch('http://localhost:1337/api/quote', {
@@ -144,7 +146,33 @@ const Dashboard = () => {
         }
       }
 
+    const state = {
+        title: '',
+        body: '',
+        posts:[]
+    };
 
+    useEffect(() => {
+        if (!posts.length) getPosts()
+    }, [posts])
+
+    //Get Posts
+    const getPosts = () => {
+        axios.get(
+            'http://localhost:1337/api/posts',
+            {
+                headers: {
+                    'Content-Type': 'application/json', 
+                }
+            }
+        ).then(response => {
+            setPosts(response.data.posts)
+            console.log('Data has been received!')
+        }).catch(err => {
+            console.log(err)
+            alert('Error retrieving data!!!')
+        })
+    } 
     return (
         <div>
             <h1>Hello, {username}!! :)</h1>
@@ -201,6 +229,19 @@ const Dashboard = () => {
           <br/>
             <input type="submit" value="Create Post"/>
           </form>
+          <h1>Posts</h1>
+            {   // test?
+                posts.length
+                ? posts.map((post, index) => (
+                    <div key={post._id}>
+                        <h2 id="title">Title: {post.title} </h2>
+                        <h3 id="author">{post.author}</h3>
+                        <p>{post.text}</p>
+                    </div>
+                ))
+                : <h3>No posts to display</h3>
+            }
+          
         </div>
     )
 }
