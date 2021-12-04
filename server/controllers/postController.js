@@ -3,7 +3,7 @@ const Post = require('../models/post.model')
 const User = require('../models/user.model')
 
 
-const postController = async function (req, res){
+const createPost = async function (req, res){
     let decoded = null
     try{
         decoded = jwt.verify(req.headers['x-access-token'], 'Secret1234!')
@@ -35,4 +35,20 @@ const postController = async function (req, res){
     return res.json({status: 'ok'})
 }
 
-module.exports = postController
+const getPosts = async function (req, res) {
+    // let decoded = null
+    // try{
+    //     decoded = jwt.verify(req.headers['x-access-token'], 'Secret1234!')
+    // } catch(error) {
+    //     console.log(error)
+    //     return res.json({ status: 'error', error: 'invalid token'})
+    // }
+
+    let allPosts = [];
+
+    await Post.find().then(posts => {allPosts = posts})
+
+    return res.json({status: 'ok', posts: allPosts})
+}
+
+module.exports = {createPost, getPosts}

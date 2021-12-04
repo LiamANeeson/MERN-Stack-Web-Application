@@ -2,6 +2,7 @@ import React, { useEffect, useState} from 'react'
 import jwt from 'jsonwebtoken'
 import { useNavigate } from 'react-router-dom'
 import { parseJwt } from '../utils/utils'
+import axios from 'axios'
   
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -14,6 +15,7 @@ const Dashboard = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [text, setText] = useState('')
+    const [posts, setPosts] = useState([])
 
     async function populateQuote() {
         const req = await fetch('http://localhost:1337/api/quote', {
@@ -144,7 +146,28 @@ const Dashboard = () => {
         }
       }
 
+    const state = {
+        title: '',
+        body: '',
+        posts:[]
+    };
 
+    useEffect(() => {
+        if (!posts.length) getPosts()
+    }, [posts])
+
+    //Get Posts
+    const getPosts = () => {
+        axios.get('http://localhost:1337/api/posts')
+        .then(response => {
+            setPosts(response.data.posts)
+            console.log('Data has been received!')
+        })
+        .catch(err => {
+            console.log(err)
+            alert('Error retrieving data!!!')
+        })
+    } 
     return (
         <div>
             <h1>Hello, {username}!! :)</h1>

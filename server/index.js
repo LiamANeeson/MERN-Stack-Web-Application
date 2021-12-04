@@ -15,7 +15,8 @@ mongoose.connect('mongodb://localhost:27017/mern_assignment')
 
 userRouter.loginRouter(app)
 userRouter.registerRouter(app)
-postRouter(app)
+postRouter.createPost(app)
+postRouter.getPosts(app)
 
 // Delete Profile 
 app.delete('/api/delete', async (req, res) => {
