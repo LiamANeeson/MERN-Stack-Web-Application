@@ -6,7 +6,8 @@ const User = new mongoose.Schema(
         email: {type: String, required: true, unique: true},
         password: {type: String, required: true},
         quote: {type: String },
-        posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }]
+        posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }],
+        likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }]
     }, { collection: 'user-data' }
 )
 
