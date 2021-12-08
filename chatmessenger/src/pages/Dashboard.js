@@ -16,6 +16,8 @@ const Dashboard = () => {
     const [author, setAuthor] = useState('')
     const [text, setText] = useState('')
     const [posts, setPosts] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
+    const [authorFilterValue, setAuthorFilterValue] = useState('')
 
     async function populateQuote() {
         const req = await fetch('http://localhost:1337/api/quote', {
@@ -172,7 +174,44 @@ const Dashboard = () => {
             console.log(err)
             alert('Error retrieving data!!!')
         })
-    } 
+    }
+
+    useEffect(() => {
+        if (searchTerm) {
+            axios.get(
+                'http://localhost:1337/api/search', {
+                params: {query: searchTerm}
+            }).then(response => {
+                setPosts(response.data.foundPosts)
+                console.log('Data has been received!')
+            }).catch(err => {
+                if (err.response.status !== 404){
+                    alert('Error retrieving data!!!')
+                }
+            })
+        }
+    }, [searchTerm])
+
+    const getUniquePostFields = (fieldName) => {
+        const foundItems = []
+
+        for (let post of posts) {
+            if (!foundItems.includes(post[fieldName])) {
+                foundItems.push(post[fieldName])
+            }
+        }
+
+        return foundItems.map(
+            foundItem => (
+                <option
+                    key={foundItem}
+                    value={foundItem} >
+                        {foundItem}
+                </option>
+            )
+        )
+    }
+
     return (
         <div>
             <h1>Hello, {username}!! :)</h1>
@@ -205,11 +244,30 @@ const Dashboard = () => {
           <br/>
           <br/>
           {/* -----------------------Search---------------------------- */}
-          {/* <input
-          type="search"
-          placeholder="Search"
-          name="searchTerm"
-          ></input> */}
+          <input
+            type="search"
+            placeholder="Search"
+            name="searchTerm"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <br/>
+          <br/>
+          {/* -----------------------Filter---------------------------- */}
+          <label htmlFor="authorFilter">Author:</label>
+          <select
+            name="authorFilter"
+            placeholder="Filter"
+            value={authorFilterValue}
+            onChange={(e) => setAuthorFilterValue(e.target.value)} >
+                <option
+                    key={0}
+                    value={''} >
+                        All
+                </option>
+                {getUniquePostFields("author")}
+          </select>
+          <br/>
           {/* -------------------Create Post-------------------- */}
           <form onSubmit={createPost}>
           <input 
@@ -230,15 +288,15 @@ const Dashboard = () => {
             <input type="submit" value="Create Post"/>
           </form>
           <h1>Posts</h1>
-            {   // test?
-                posts.length
-                ? posts.map((post, index) => (
+            {
+                posts
+                ? (posts.filter(post => authorFilterValue.length ? (post.author == authorFilterValue) : true).map((post, index) => (
                     <div key={post._id}>
                         <h2 id="title">Title: {post.title} </h2>
                         <h3 id="author">{post.author}</h3>
                         <p>{post.text}</p>
                     </div>
-                ))
+                )))
                 : <h3>No posts to display</h3>
             }
           

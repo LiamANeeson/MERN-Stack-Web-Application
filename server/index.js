@@ -17,6 +17,8 @@ userRouter.loginRouter(app)
 userRouter.registerRouter(app)
 postRouter.createPost(app)
 postRouter.getPosts(app)
+postRouter.likePost(app)
+postRouter.searchPosts(app)
 
 // Delete Profile 
 app.delete('/api/delete', async (req, res) => {
