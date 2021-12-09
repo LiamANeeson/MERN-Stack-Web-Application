@@ -51,4 +51,36 @@ const postLogin = async function (req, res){
      }
 }
 
-module.exports = {postRegister, postLogin}
+const getSavedPosts = async function (req, res) {
+    let decoded = null
+    try{
+        decoded = jwt.verify(req.headers['x-access-token'], 'Secret1234!')
+    } catch(error) {
+        console.log(error)
+        return res.json({ status: 'error', error: 'invalid token'})
+    }
+// Problem 
+    const user = await User.findById(decoded.id).populate('savedPosts')
+    console.log(user)
+    return res.json({status: 'ok', user: user})
+}
+
+const savePost = async function (req, res) {
+    let decoded = null
+    try{
+        decoded = jwt.verify(req.headers['x-access-token'], 'Secret1234!')
+    } catch(error) {
+        console.log(error)
+        return res.json({ status: 'error', error: 'invalid token'})
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        {_id: decoded.id},
+        { $push: { savedPosts: req.body.postID } },
+        { new: true, useFindAndModify: false }
+    )
+
+    return res.json({status: 'ok', updatedUser: updatedUser})
+}
+
+module.exports = {postRegister, postLogin, getSavedPosts, savePost}

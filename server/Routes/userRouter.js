@@ -7,4 +7,7 @@ const registerRouter = app => app.post('/api/register', userController.postRegis
 // const postLogin = require('../controllers/userController')
 const loginRouter = app => app.post('/api/login', userController.postLogin)
 
-module.exports = {registerRouter, loginRouter}
+const getSavedPosts = app => app.post('/api/saved-posts', userController.getSavedPosts)
+const savePost = app => app.post('/api/save-post', userController.savePost)
+
+module.exports = {registerRouter, loginRouter, getSavedPosts, savePost}
