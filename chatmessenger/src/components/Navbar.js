@@ -67,11 +67,10 @@ import {
     },
   }));
   
-  const Navbar = () => {
+  const Navbar = (props) => {
     const [open, setOpen] = useState(false);
     const classes = useStyles({ open });
     const [searchTerm, setSearchTerm] = useState('')
-    const [posts, setPosts] = useState([])
 
     useEffect(() => {
       if (searchTerm) {
@@ -79,7 +78,7 @@ import {
               'http://localhost:1337/api/search', {
               params: {query: searchTerm}
           }).then(response => {
-              setPosts(response.data.foundPosts)
+              props.setPosts(response.data.foundPosts)
               console.log('Data has been received!')
           }).catch(err => {
               if (err.response.status !== 404){

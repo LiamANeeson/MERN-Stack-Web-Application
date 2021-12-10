@@ -176,24 +176,20 @@ const Dashboard = () => {
 
     return (
         <div>
-            <Navbar />
+            <Navbar setPosts={setPosts}/>
             <br/>
             <br/>
             <br/>
             <br/>
             <h1>Hello, {username}!! :)</h1>
-          <br/>
-          <br/>
           {/* -----------------------Search---------------------------- */}
-          <input
+          {/* <input
             type="search"
             placeholder="Search"
             name="searchTerm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <br/>
-          <br/>
+          /> */}
           {/* -----------------------Filter---------------------------- */}
           <label htmlFor="authorFilter">Author:</label>
           <select
