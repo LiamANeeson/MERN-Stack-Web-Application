@@ -9,7 +9,8 @@ import {
     Typography,
   } from "@material-ui/core";
   import { Cancel, Mail, Notifications, Search } from "@material-ui/icons";
-  import { useState } from "react";
+  import { useState, useEffect } from "react";
+  import axios from 'axios'
   
   const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -66,9 +67,27 @@ import {
     },
   }));
   
-  const Navbar = () => {
+  const Navbar = (props) => {
     const [open, setOpen] = useState(false);
     const classes = useStyles({ open });
+    const [searchTerm, setSearchTerm] = useState('')
+
+    useEffect(() => {
+      if (searchTerm) {
+          axios.get(
+              'http://localhost:1337/api/search', {
+              params: {query: searchTerm}
+          }).then(response => {
+              props.setPosts(response.data.foundPosts)
+              console.log('Data has been received!')
+          }).catch(err => {
+              if (err.response.status !== 404){
+                  alert('Error retrieving data!!!')
+              }
+          })
+      }
+  }, [searchTerm])
+
     return (
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
@@ -80,7 +99,12 @@ import {
           </Typography>
           <div className={classes.search}>
             <Search />
-            <InputBase placeholder="Search..." className={classes.input} />
+            <InputBase 
+              placeholder="Search..." 
+              className={classes.input} 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <Cancel className={classes.cancel} onClick={() => setOpen(false)} />
           </div>
           <div className={classes.icons}>
@@ -95,7 +119,7 @@ import {
               <Notifications />
             </Badge>
             <Avatar>
-              LN
+              {/* {username} */}
             </Avatar>
           </div>
         </Toolbar>

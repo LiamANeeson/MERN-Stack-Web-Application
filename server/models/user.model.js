@@ -7,7 +7,8 @@ const User = new mongoose.Schema(
         password: {type: String, required: true},
         quote: {type: String },
         posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }],
-        likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }]
+        likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }],
+        savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }],
     }, { collection: 'user-data' }
 )
 
