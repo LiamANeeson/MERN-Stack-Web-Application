@@ -9,29 +9,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = (props) => {
+const Feed = ({authorFilterValue, posts, setPosts}) => {
   const classes = useStyles();
-  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     if (!posts.length) getPosts(setPosts);
   }, [posts]);
 
   const getFilteredPosts = () => {
-    // if (authorFilterValue) {
-    //   return posts.filter(post =>
-    //     authorFilterValue.length ? post.author == authorFilterValue : true
-    //   )
-    // } else {
+    if (authorFilterValue) {
+      return posts.filter(post =>
+        authorFilterValue.length ? post.author == authorFilterValue : true
+      )
+    } else {
       return posts
-    // }
+    }
   }
 
   return (
     <Container className={classes.container}>
       {
         getFilteredPosts().map(post =>
-          <Post title={post.title} author={post.author} text={post.text} />
+          <Post key={post._id} id={post._id} title={post.title} author={post.author} text={post.text} />
         )
       }
     </Container>

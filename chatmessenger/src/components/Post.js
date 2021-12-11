@@ -4,12 +4,10 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardMedia,
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -21,10 +19,27 @@ const useStyles = makeStyles((theme) => ({
 const Post = props => {
   const classes = useStyles();
 
+  async function savePost(postID) {
+    const response = await fetch("http://localhost:1337/api/save-post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        postID: postID,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.status === "ok") {
+      alert("Post saved successfully.");
+    }
+  }
+
   return (
     <Card className={classes.card}>
       <CardActionArea>
-        <CardMedia className={classes.media} title="My Post" />
         <CardContent>
           <Typography gutterBottom variant="h5">
             {props.title}
@@ -32,7 +47,7 @@ const Post = props => {
           <Typography variant="subtitle1">
             {props.author}
           </Typography>
-          <Typography variant="body">
+          <Typography variant="body1">
             {props.text}
           </Typography>
         </CardContent>
@@ -40,7 +55,7 @@ const Post = props => {
       <CardActions>
         <Button>Share</Button>
         <Button>Like</Button>
-        <Button>Save</Button>
+        <Button onClick={() => savePost(props.id)}>Save</Button>
       </CardActions>
     </Card>
   );
