@@ -59,10 +59,10 @@ const getSavedPosts = async function (req, res) {
     console.log(error);
     return res.json({ status: "error", error: "invalid token" });
   }
-  // Problem
+
   const user = await User.findById(decoded.id).populate("savedPosts");
-  console.log(user);
-  return res.json({ status: "ok", user: user });
+
+  return res.json({ status: "ok", savedPosts: user.savedPosts });
 };
 
 const savePost = async function (req, res) {

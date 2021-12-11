@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Container, makeStyles } from "@material-ui/core";
 import Post from "./Post";
 import {getPosts} from '../utils/utils';
@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = ({authorFilterValue, posts, setPosts}) => {
+const Feed = ({authorFilterValue, posts, setPosts, savedPostIDs}) => {
   const classes = useStyles();
 
   useEffect(() => {
@@ -30,7 +30,12 @@ const Feed = ({authorFilterValue, posts, setPosts}) => {
     <Container className={classes.container}>
       {
         getFilteredPosts().map(post =>
-          <Post key={post._id} id={post._id} title={post.title} author={post.author} text={post.text} />
+          <Post
+            key={post._id}
+            id={post._id}
+            title={post.title}
+            author={post.author} text={post.text}
+            isSavedPost={savedPostIDs.includes(post._id)} />
         )
       }
     </Container>

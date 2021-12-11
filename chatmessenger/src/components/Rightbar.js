@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Rightbar = () => {
+const Rightbar = (props) => {
     const classes = useStyles();
     return(
     <Container className={classes.container}>
@@ -26,7 +26,7 @@ const Rightbar = () => {
             <Avatar></Avatar>
         </AvatarGroup>
         <h1>My Saved Posts</h1>
-        <MySavedPosts />
+        {props.children}
     </Container>
     );
 };
