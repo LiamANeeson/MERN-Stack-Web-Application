@@ -9,15 +9,8 @@ import Feed from "../components/Feed";
 import { getPosts } from "../utils/utils";
 import Filter from "../components/Filter";
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: theme.spacing(10),
-  },
-}));
 
-const Dashboard = () => {
-  const classes = useStyles();
-  
+const Dashboard = () => {  
   const [posts, setPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([])
 
@@ -36,7 +29,8 @@ const Dashboard = () => {
             authorFilterValue={authorFilterValue}
             posts={posts}
             setPosts={setPosts}
-            savedPostIDs={savedPosts.map(post => post._id)} />
+            savedPostIDs={savedPosts.map(post => post._id)}
+            setSavedPosts={setSavedPosts} />
         </Grid>
         <Grid item sm={3}>
           <Rightbar>
