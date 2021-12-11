@@ -19,33 +19,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = useStyles();
-  const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
+  
   const [posts, setPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([])
 
   const [authorFilterValue, setAuthorFilterValue] = useState("");
-
-  // Create a Post
-  async function createPost(event) {
-    event.preventDefault();
-
-    const response = await fetch("http://localhost:1337/api/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": localStorage.getItem("token"),
-      },
-      body: JSON.stringify({
-        title,
-        text,
-      }),
-    });
-
-    const data = await response.json();
-    if (data.status === "ok") {
-      alert("Post Success");
-    }
-  }
 
   const getUniquePostFields = (fieldName) => {
     const foundItems = [];
@@ -71,10 +49,16 @@ const Dashboard = () => {
           <DrawerLeft />
         </Grid>
         <Grid item sm={7} xs={10}>
-          <Feed authorFilterValue={authorFilterValue} posts={posts} setPosts={setPosts} />
+          <Feed
+            authorFilterValue={authorFilterValue}
+            posts={posts}
+            setPosts={setPosts}
+            savedPostIDs={savedPosts.map(post => post._id)} />
         </Grid>
         <Grid item sm={3}>
-          <Rightbar />
+          <Rightbar>
+            <MySavedPosts savedPosts={savedPosts} setSavedPosts={setSavedPosts} />
+          </Rightbar>
         </Grid>
       </Grid>
       {/* -----------------------Filter---------------------------- */}
@@ -90,26 +74,6 @@ const Dashboard = () => {
         </option>
         {getUniquePostFields("author")}
       </select>
-      <br />
-      {/* -------------------Create Post-------------------- */}
-      <form onSubmit={createPost}>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          type="title"
-          placeholder="Post Title"
-        />
-        <br />
-        <br />
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          type="text"
-          placeholder="Insert Post Here"
-        />
-        <br />
-        <input type="submit" value="Create Post" />
-      </form>
       <Add />
     </div>
   );

@@ -1,28 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 
-const MySavedPosts = props => {
-    const [savedPosts, setSavedPosts] = useState([])
-
+const MySavedPosts = ({savedPosts, setSavedPosts}) => {
     useEffect(() => {
-        if (!savedPosts) getSavedPosts()
+        if (!savedPosts.length) getSavedPosts()
     }, [savedPosts])
 
     async function getSavedPosts() {
+        console.log('here')
         const response = await fetch('http://localhost:1337/api/saved-posts', {
             method:'GET',
             headers: {
-              'Content-Type': 'application/json', 
-              'x-access-token': localStorage.getItem('token'),
+                'Content-Type': 'application/json', 
+                'x-access-token': localStorage.getItem('token'),
             },
-          }).then(response => {
-            setSavedPosts(response.data.user.savedPosts)
-          })
-    
-          const data = await response.json();
-          if(data.status === 'ok') {
-            alert("Posts retrieved successfully.")
-          }
+        })
+        const data = await response.json()
+        setSavedPosts(data.savedPosts)
     }
 
     return (

@@ -55,7 +55,11 @@ const Post = props => {
       <CardActions>
         <Button>Share</Button>
         <Button>Like</Button>
-        <Button onClick={() => savePost(props.id)}>Save</Button>
+        <Button
+          onClick={() => savePost(props.id)}
+          disabled={props.isSavedPost}>
+            {props.isSavedPost ? "Saved" : "Save"}
+        </Button>
       </CardActions>
     </Card>
   );
