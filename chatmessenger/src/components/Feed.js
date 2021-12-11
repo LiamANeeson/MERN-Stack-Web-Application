@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import { Container, makeStyles } from "@material-ui/core";
-import { useState } from "react";
 import Post from "./Post";
+import {getPosts} from '../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -8,13 +9,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = () => {
+const Feed = ({authorFilterValue, posts, setPosts}) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    if (!posts.length) getPosts(setPosts);
+  }, [posts]);
+
+  const getFilteredPosts = () => {
+    if (authorFilterValue) {
+      return posts.filter(post =>
+        authorFilterValue.length ? post.author == authorFilterValue : true
+      )
+    } else {
+      return posts
+    }
+  }
+
   return (
     <Container className={classes.container}>
-      <Post title="Choose the perfect design" />
-      <Post title="Simply Recipes Less Stress. More Joy" />
-      <Post title="What To Do In London" />
+      {
+        getFilteredPosts().map(post =>
+          <Post key={post._id} id={post._id} title={post.title} author={post.author} text={post.text} />
+        )
+      }
     </Container>
   );
 };

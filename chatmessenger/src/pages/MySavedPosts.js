@@ -16,7 +16,6 @@ const MySavedPosts = props => {
               'x-access-token': localStorage.getItem('token'),
             },
           }).then(response => {
-              console.log(response.data)
             setSavedPosts(response.data.user.savedPosts)
           })
     
@@ -29,7 +28,7 @@ const MySavedPosts = props => {
     return (
         <div>
             {
-                savedPosts.length || console.log(savedPosts)
+                savedPosts.length
                 ? savedPosts.map(post => (
                     <div key={post._id}>
                         <h2 id="title">Title: {post.title} </h2>
