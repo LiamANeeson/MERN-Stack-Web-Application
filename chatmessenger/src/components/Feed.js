@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { Container, makeStyles } from "@material-ui/core";
+import { useEffect, useState } from "react";
+import { Container, makeStyles, Typography } from "@material-ui/core";
 import Post from "./Post";
-import {getPosts} from '../utils/utils';
+import { getPosts, getPostsByCategory } from '../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -9,11 +9,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = ({authorFilterValue, posts, setPosts, savedPostIDs, setSavedPosts}) => {
-  const classes = useStyles();
+const Feed = ({authorFilterValue, category, posts, setPosts, savedPostIDs, setSavedPosts}) => {
+  const classes = useStyles()
 
   useEffect(() => {
-    if (!posts.length) getPosts(setPosts);
+    if (!posts.length && !category){
+      getPosts(setPosts);
+    }
   }, [posts]);
 
   const getFilteredPosts = () => {
@@ -25,19 +27,22 @@ const Feed = ({authorFilterValue, posts, setPosts, savedPostIDs, setSavedPosts})
       return posts
     }
   }
-
+  console.log(getFilteredPosts())
   return (
     <Container className={classes.container}>
       {
-        getFilteredPosts().map(post =>
+        getFilteredPosts().length
+        ? getFilteredPosts().map(post =>
           <Post
             key={post._id}
             id={post._id}
             title={post.title}
             author={post.author} text={post.text}
             isSavedPost={savedPostIDs.includes(post._id)}
-            setSavedPosts={setSavedPosts} />
+            setSavedPosts={setSavedPosts}
+            getPostsByCategory={getPostsByCategory} />
         )
+        : <Typography variant="body1">No posts to display.</Typography>
       }
     </Container>
   );

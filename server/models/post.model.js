@@ -1,5 +1,13 @@
 const mongoose = require('mongoose')
 
+const categoriesEnum = [
+    'Films',
+    'Music',
+    'Books',
+    'Podcasts',
+    'Sports'
+];
+
 const Post = new mongoose.Schema(
     {
         title: {type: String, required: true },
@@ -7,7 +15,8 @@ const Post = new mongoose.Schema(
         dateCreated: {type: Date},
         text: {type: String },
         likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user-data' }],
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'user-data' }
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'user-data' },
+        category: {type: String, enum: categoriesEnum, unique: false},
     }, { collection: 'post' }
 )
 

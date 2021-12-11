@@ -1,5 +1,12 @@
+import { useEffect, useRef } from 'react';
 import axios from "axios";
-
+import {
+  MovieOutlined,
+  MusicNoteOutlined,
+  MenuBookOutlined,
+  PodcastsOutlined,
+  SportsTennisOutlined
+} from "@mui/icons-material";
 
 export const parseJwt = (token) => {
   try {
@@ -37,4 +44,36 @@ export async function getSavedPosts(callbackFunction) {
   })
   const data = await response.json()
   callbackFunction(data.savedPosts)
+}
+
+export async function getPostsByCategory(category, callbackFunction) {
+  const response = await fetch(`http://localhost:1337/api/posts-by-category?category=${category}`, {
+      method:'GET',
+      headers: {
+          'Content-Type': 'application/json', 
+          'x-access-token': localStorage.getItem('token'),
+      },
+  })
+  const data = await response.json()
+  callbackFunction(data.posts)
+}
+
+export const allowedCategories = {
+  'Films': {icon: MovieOutlined},
+  'Music': {icon: MusicNoteOutlined},
+  'Books': {icon: MenuBookOutlined},
+  'Podcasts': {icon: PodcastsOutlined},
+  'Sports': {icon: SportsTennisOutlined}
+}
+
+export const usePrevious = (value) => {
+  /**
+   * Access previous state...
+   * From https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state
+   */
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
 }
