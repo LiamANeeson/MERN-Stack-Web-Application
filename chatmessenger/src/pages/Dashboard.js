@@ -25,7 +25,7 @@ const Dashboard = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [text, setText] = useState("");
-  const [posts, setPosts] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [authorFilterValue, setAuthorFilterValue] = useState("");
 
@@ -103,67 +103,39 @@ const Dashboard = () => {
     }
   }
 
-  const state = {
-    title: "",
-    body: "",
-    posts: [],
-  };
+  // useEffect(() => {
+  //   if (searchTerm) {
+  //     axios
+  //       .get("http://localhost:1337/api/search", {
+  //         params: { query: searchTerm },
+  //       })
+  //       .then((response) => {
+  //         setPosts(response.data.foundPosts);
+  //         console.log("Data has been received!");
+  //       })
+  //       .catch((err) => {
+  //         if (err.response.status !== 404) {
+  //           alert("Error retrieving data!!!");
+  //         }
+  //       });
+  //   }
+  // }, [searchTerm]);
 
-  useEffect(() => {
-    if (!posts.length) getPosts();
-  }, [posts]);
+  // const getUniquePostFields = (fieldName) => {
+  //   const foundItems = [];
 
-  //Get Posts
-  const getPosts = () => {
-    axios
-      .get("http://localhost:1337/api/posts", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        setPosts(response.data.posts);
-        console.log("Data has been received!");
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Error retrieving data!!!");
-      });
-  };
+  //   for (let post of posts) {
+  //     if (!foundItems.includes(post[fieldName])) {
+  //       foundItems.push(post[fieldName]);
+  //     }
+  //   }
 
-  useEffect(() => {
-    if (searchTerm) {
-      axios
-        .get("http://localhost:1337/api/search", {
-          params: { query: searchTerm },
-        })
-        .then((response) => {
-          setPosts(response.data.foundPosts);
-          console.log("Data has been received!");
-        })
-        .catch((err) => {
-          if (err.response.status !== 404) {
-            alert("Error retrieving data!!!");
-          }
-        });
-    }
-  }, [searchTerm]);
-
-  const getUniquePostFields = (fieldName) => {
-    const foundItems = [];
-
-    for (let post of posts) {
-      if (!foundItems.includes(post[fieldName])) {
-        foundItems.push(post[fieldName]);
-      }
-    }
-
-    return foundItems.map((foundItem) => (
-      <option key={foundItem} value={foundItem}>
-        {foundItem}
-      </option>
-    ));
-  };
+  //   return foundItems.map((foundItem) => (
+  //     <option key={foundItem} value={foundItem}>
+  //       {foundItem}
+  //     </option>
+  //   ));
+  // };
 
   async function savePost(postID) {
     const response = await fetch("http://localhost:1337/api/save-post", {
@@ -183,9 +155,11 @@ const Dashboard = () => {
     }
   }
 
+  
+
   return (
     <div>
-      <Navbar setPosts={setPosts} />
+      <Navbar /*setPosts={setPosts}*/ />
       <Grid container>
         <Grid item sm={2} xs={2}>
           <DrawerLeft />
@@ -209,7 +183,7 @@ const Dashboard = () => {
         <option key={0} value={""}>
           All
         </option>
-        {getUniquePostFields("author")}
+        {/* {getUniquePostFields("author")} */}
       </select>
       <br />
       {/* -------------------Create Post-------------------- */}
@@ -231,24 +205,7 @@ const Dashboard = () => {
         <br />
         <input type="submit" value="Create Post" />
       </form>
-      <h1>Posts</h1>
-      {posts ? (
-        posts
-          .filter((post) =>
-            authorFilterValue.length ? post.author == authorFilterValue : true
-          )
-          .map((post, index) => (
-            <div key={post._id}>
-              <h2 id="title">Title: {post.title} </h2>
-              <h3 id="author">{post.author}</h3>
-              <p>{post.text}</p>
-              <button onClick={() => savePost(post._id)}>Save Post</button>
-            </div>
-          ))
-      ) : (
-        <h3>No posts to display</h3>
-      )}
-      <Add getPosts={getPosts} />
+      <Add />
     </div>
   );
 };
