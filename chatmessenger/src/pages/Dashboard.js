@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MySavedPosts from "./MySavedPosts";
-import jwt from "jsonwebtoken";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Navbar from "../components/Navbar";
 import Add from "../components/Add";
 import DrawerLeft from "../components/DrawerLeft";
@@ -10,6 +7,7 @@ import Rightbar from "../components/Rightbar";
 import { Grid, makeStyles } from "@material-ui/core";
 import Feed from "../components/Feed";
 import { getPosts } from "../utils/utils";
+import Filter from "../components/Filter";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -25,22 +23,7 @@ const Dashboard = () => {
 
   const [authorFilterValue, setAuthorFilterValue] = useState("");
 
-  const getUniquePostFields = (fieldName) => {
-    const foundItems = [];
-
-    for (let post of posts) {
-      if (!foundItems.includes(post[fieldName])) {
-        foundItems.push(post[fieldName]);
-      }
-    }
-
-    return foundItems.map((foundItem) => (
-      <option key={foundItem} value={foundItem}>
-        {foundItem}
-      </option>
-    ));
-  };
-
+  
   return (
     <div>
       <Navbar getPosts={getPosts} setPosts={setPosts} />
@@ -57,23 +40,15 @@ const Dashboard = () => {
         </Grid>
         <Grid item sm={3}>
           <Rightbar>
+            <Filter
+              posts={posts}
+              authorFilterValue={authorFilterValue}
+              setAuthorFilterValue={setAuthorFilterValue} />
             <MySavedPosts savedPosts={savedPosts} setSavedPosts={setSavedPosts} />
           </Rightbar>
         </Grid>
       </Grid>
-      {/* -----------------------Filter---------------------------- */}
-      <label htmlFor="authorFilter">Author:</label>
-      <select
-        name="authorFilter"
-        placeholder="Filter"
-        value={authorFilterValue}
-        onChange={(e) => setAuthorFilterValue(e.target.value)}
-      >
-        <option key={0} value={""}>
-          All
-        </option>
-        {getUniquePostFields("author")}
-      </select>
+      
       <Add />
     </div>
   );
