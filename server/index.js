@@ -19,6 +19,7 @@ userRouter.getSavedPosts(app)
 userRouter.savePost(app)
 postRouter.createPost(app)
 postRouter.getPosts(app)
+postRouter.getPostsByCategory(app)
 postRouter.likePost(app)
 postRouter.searchPosts(app)
 

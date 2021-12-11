@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Add from "../components/Add";
 import DrawerLeft from "../components/DrawerLeft";
 import Rightbar from "../components/Rightbar";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import Feed from "../components/Feed";
 import { getPosts } from "../utils/utils";
 import Filter from "../components/Filter";
@@ -13,8 +13,8 @@ import Filter from "../components/Filter";
 const Dashboard = () => {  
   const [posts, setPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([])
-
-  const [authorFilterValue, setAuthorFilterValue] = useState("");
+  const [authorFilterValue, setAuthorFilterValue] = useState("")
+  const [category, setCategory] = useState("")
 
   
   return (
@@ -22,7 +22,7 @@ const Dashboard = () => {
       <Navbar getPosts={getPosts} setPosts={setPosts} />
       <Grid container>
         <Grid item sm={2} xs={2}>
-          <DrawerLeft />
+          <DrawerLeft setCategory={setCategory} setPosts={setPosts} />
         </Grid>
         <Grid item sm={7} xs={10}>
           <Feed
@@ -30,7 +30,8 @@ const Dashboard = () => {
             posts={posts}
             setPosts={setPosts}
             savedPostIDs={savedPosts.map(post => post._id)}
-            setSavedPosts={setSavedPosts} />
+            setSavedPosts={setSavedPosts}
+            category={category} />
         </Grid>
         <Grid item sm={3}>
           <Rightbar>
@@ -42,8 +43,7 @@ const Dashboard = () => {
           </Rightbar>
         </Grid>
       </Grid>
-      
-      <Add />
+      <Add setPosts={setPosts} />
     </div>
   );
 };

@@ -1,5 +1,8 @@
+import React from 'react';
 import { Container, makeStyles, Typography } from "@material-ui/core";
 import { Home, People, Settings, ExitToApp } from "@material-ui/icons";
+import { allowedCategories, getPostsByCategory } from '../utils/utils';
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,28 +30,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DrawerLeft = () => {
-  const classes = useStyles();
+const DrawerLeft = ({setCategory, setPosts}) => {
+  const classes = useStyles()
+
+  const handleCategoryChange = (category) => {
+    setCategory(category)
+    getPostsByCategory(category, setPosts)
+  }
+
   return (
     <Container className={classes.container}>
       <div className={classes.item}>
-        <Home className={classes.icon} />
+        <Home />
         <Typography className={classes.text}>Home</Typography>
       </div>
       <div className={classes.item}>
-        <People className={classes.icon} />
+        <People />
         <Typography className={classes.text}>Friends</Typography>
       </div>
       <div className={classes.item}>
-        <People className={classes.icon} />
+        <People />
         <Typography className={classes.text}>Groups</Typography>
       </div>
+      {Object.keys(allowedCategories).map(category => (
+        <div key={category} onClick={() => handleCategoryChange(category)} className={classes.item}>
+          {React.createElement(allowedCategories[category].icon)}
+          <Typography className={classes.text}>{category}</Typography>
+        </div>
+      ))}
       <div className={classes.item}>
-        <Settings className={classes.icon} />
+        <Settings />
         <Typography className={classes.text}>Settings</Typography>
       </div>
       <div className={classes.item}>
-        <ExitToApp className={classes.icon} />
+        <ExitToApp />
         <Typography className={classes.text}>Logout</Typography>
       </div>
     </Container>

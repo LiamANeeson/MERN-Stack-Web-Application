@@ -13,9 +13,11 @@ import {
   TextField,
   Tooltip,
 } from "@material-ui/core";
-import { Add as AddIcon } from "@material-ui/icons";
+import { Add as AddIcon} from "@material-ui/icons";
 import { useState } from "react";
 import MuiAlert from "@material-ui/lab/Alert";
+import { allowedCategories, getPosts } from '../utils/utils';
+
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -56,6 +58,7 @@ const Add = (props) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [category, setCategory] = useState(null);
 
   async function createPost(event) {
     event.preventDefault();
@@ -69,13 +72,14 @@ const Add = (props) => {
       body: JSON.stringify({
         title,
         text,
+        category,
       })
     });
 
     const data = await response.json();
     if (data.status === "ok") {
       setOpen(false)
-      props.getPosts()
+      getPosts(props.setPosts)
     }
   }
 
@@ -128,23 +132,18 @@ const Add = (props) => {
               <FormLabel component="legend">
                 What group is this post for?
               </FormLabel>
-              {/* <RadioGroup>
-                  <FormControlLabel
-                    value="formula_1"
-                    control={<Radio size="small" />}
-                    label="Formula 1"
-                  />
-                  <FormControlLabel
-                    value="rugby"
-                    control={<Radio size="small" />}
-                    label="Rugby"
-                  />
-                  <FormControlLabel
-                    value="movies"
-                    control={<Radio size="small" />}
-                    label="Movies"
-                  />
-                </RadioGroup> */}
+              <RadioGroup>
+                {
+                  Object.keys(allowedCategories).map(category => (
+                    <FormControlLabel
+                      key={category}
+                      value={category}
+                      control={<Radio size="small" />}
+                      label={category}
+                      onChange={(event) => setCategory(event.target.value)} />
+                  ))
+                }
+              </RadioGroup>
             </div>
             <div className={classes.item}>
               <Button

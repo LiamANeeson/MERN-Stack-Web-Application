@@ -19,6 +19,7 @@ const createPost = async function (req, res) {
     dateCreated: new Date(),
     text: req.body.text,
     user: decoded.id,
+    category: req.body.category
   }).then((post) => {
     postID = post._id;
   });
@@ -57,6 +58,16 @@ const getPosts = async function (req, res) {
   return res.json({ status: "ok", posts: allPosts });
 };
 
+const getPostsByCategory = async function (req, res) {
+  let foundPosts = [];
+
+  await Post.find({category: req.query.category}).then((posts) => {
+    foundPosts = posts;
+  });
+
+  return res.json({ status: "ok", posts: foundPosts });
+};
+
 const likePost = async function (req, res) {
   let decoded = null;
   try {
@@ -85,4 +96,4 @@ const likePost = async function (req, res) {
   });
 };
 
-module.exports = { createPost, getPosts, likePost, searchPosts };
+module.exports = { createPost, getPosts, getPostsByCategory, likePost, searchPosts };
