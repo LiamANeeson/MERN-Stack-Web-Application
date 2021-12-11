@@ -26,3 +26,15 @@ export const getPosts = (callbackFunction) => {
       alert("Error retrieving data!!!")
     });
 };
+
+export async function getSavedPosts(callbackFunction) {
+  const response = await fetch('http://localhost:1337/api/saved-posts', {
+      method:'GET',
+      headers: {
+          'Content-Type': 'application/json', 
+          'x-access-token': localStorage.getItem('token'),
+      },
+  })
+  const data = await response.json()
+  callbackFunction(data.savedPosts)
+}

@@ -1,26 +1,25 @@
 import React, { useEffect } from 'react';
+import { Typography, makeStyles } from '@material-ui/core';
+import { getSavedPosts } from '../utils/utils';
 
+const useStyles = makeStyles((theme) => ({
+    savePostsTitle:{
+        fontSize: 36,
+        fontWeight: 500,
+        color: "#555",
+    }
+}));
 
 const MySavedPosts = ({savedPosts, setSavedPosts}) => {
-    useEffect(() => {
-        if (!savedPosts.length) getSavedPosts()
-    }, [savedPosts])
+    const classes = useStyles();
 
-    async function getSavedPosts() {
-        console.log('here')
-        const response = await fetch('http://localhost:1337/api/saved-posts', {
-            method:'GET',
-            headers: {
-                'Content-Type': 'application/json', 
-                'x-access-token': localStorage.getItem('token'),
-            },
-        })
-        const data = await response.json()
-        setSavedPosts(data.savedPosts)
-    }
+    useEffect(() => {
+        if (!savedPosts.length) getSavedPosts(setSavedPosts)
+    }, [savedPosts])
 
     return (
         <div>
+            <Typography className={classes.savePostsTitle}>Saved Posts</Typography> 
             {
                 savedPosts.length
                 ? savedPosts.map(post => (

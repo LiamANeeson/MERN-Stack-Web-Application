@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   CardActions,
@@ -7,7 +8,9 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import { getSavedPosts } from "../utils/utils";
+
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -33,7 +36,7 @@ const Post = props => {
 
     const data = await response.json();
     if (data.status === "ok") {
-      alert("Post saved successfully.");
+      getSavedPosts(props.setSavedPosts)
     }
   }
 

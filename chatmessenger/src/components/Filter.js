@@ -1,4 +1,6 @@
 import React from 'react';
+import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+
 
 const Filter = ({posts, authorFilterValue, setAuthorFilterValue}) => {
 
@@ -12,28 +14,28 @@ const Filter = ({posts, authorFilterValue, setAuthorFilterValue}) => {
         }
     
         return foundItems.map((foundItem) => (
-          <option key={foundItem} value={foundItem}>
+          <MenuItem key={foundItem} value={foundItem}>
             {foundItem}
-          </option>
+          </MenuItem>
         ));
       };
     
 
     return (
-        <div>
-            <label htmlFor="authorFilter">Filter by Author:</label>
-            <select
+        <FormControl fullWidth>
+            <InputLabel htmlFor="authorFilter">Filter by Author</InputLabel>
+            <Select
             name="authorFilter"
             placeholder="Filter"
             value={authorFilterValue}
             onChange={(e) => setAuthorFilterValue(e.target.value)}
             >
-            <option key={0} value={""}>
+            <MenuItem key={0} value={""}>
                 All
-            </option>
+            </MenuItem>
             {getUniquePostFields("author")}
-            </select>
-        </div>
+            </Select>
+        </FormControl>
     )
 }
 
