@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, makeStyles, Typography } from "@material-ui/core";
 import { Home, People, Settings, ExitToApp } from "@material-ui/icons";
 import { allowedCategories, getPostsByCategory } from '../utils/utils';
+import { logout } from '../utils/utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     fontWeight: 500,
+    padding: "5%",
     [theme.breakpoints.down("sm")]: {
       display: "none",
     },
@@ -40,13 +42,9 @@ const DrawerLeft = ({setCategory, setPosts}) => {
 
   return (
     <Container className={classes.container}>
-      <div className={classes.item}>
+      <div className={classes.item} onClick={() => handleCategoryChange('')}>
         <Home />
         <Typography className={classes.text}>Home</Typography>
-      </div>
-      <div className={classes.item}>
-        <People />
-        <Typography className={classes.text}>Friends</Typography>
       </div>
       <div className={classes.item}>
         <People />
@@ -62,7 +60,7 @@ const DrawerLeft = ({setCategory, setPosts}) => {
         <Settings />
         <Typography className={classes.text}>Settings</Typography>
       </div>
-      <div className={classes.item}>
+      <div className={classes.item} onClick={logout}>
         <ExitToApp />
         <Typography className={classes.text}>Logout</Typography>
       </div>
