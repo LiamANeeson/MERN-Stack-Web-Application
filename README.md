@@ -26,3 +26,9 @@ The MongoDB database should be running on localhost port 27017. It should be cal
 - post
 - user-data
 
+
+### Using the app
+Navigate to one of the following links when you first start the app:
+- localhost:3000/register
+- localhost:3000/login
+- localhost:3000/dashboard (to see as a user who is not logged in)
