@@ -91,3 +91,9 @@ export const usePrevious = (value) => {
   });
   return ref.current;
 }
+
+export const logout = () => {
+  localStorage.setItem('username', '')
+  localStorage.setItem('token', '')
+  window.location.href = '/login'
+}
