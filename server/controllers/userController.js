@@ -51,6 +51,20 @@ const postLogin = async function (req, res) {
   }
 };
 
+const getCurrentUser = async function (req, res) {
+  let decoded = null;
+  try {
+    decoded = jwt.verify(req.headers["x-access-token"], "Secret1234!");
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "error", error: "invalid token" });
+  }
+
+  const user = await User.findById(decoded.id);
+
+  return res.json({ status: "ok", user: user });
+}
+
 const getLikedPosts = async function (req, res) {
   let decoded = null;
   try {
@@ -97,4 +111,4 @@ const savePost = async function (req, res) {
   return res.json({ status: "ok", updatedUser: updatedUser });
 };
 
-module.exports = { postRegister, postLogin, getLikedPosts, getSavedPosts, savePost };
+module.exports = { postRegister, postLogin, getCurrentUser, getLikedPosts, getSavedPosts, savePost };

@@ -51,7 +51,7 @@ const Post = props => {
         postID: postID,
       }),
     });
-    console.log(response)
+
     const data = await response.json();
     if (data.status === "ok") {
       getLikedPosts(props.setLikedPosts)
@@ -75,16 +75,25 @@ const Post = props => {
       </CardActionArea>
       <CardActions>
         <Button>Share</Button>
-        <Button
-          onClick={() => likePost(props.id)}
-          disabled={props.isLikedPost}>
-            {props.isLikedPost ? "Liked" : "Like"}
-        </Button>
-        <Button
-          onClick={() => savePost(props.id)}
-          disabled={props.isSavedPost}>
-            {props.isSavedPost ? "Saved" : "Save"}
-        </Button>
+        {
+          localStorage.getItem("token")
+          ? (<Button
+            onClick={() => likePost(props.id)}
+            disabled={props.isLikedPost}>
+              {props.isLikedPost ? "Liked" : "Like"}
+          </Button>
+          ) : null
+        }
+        {
+          localStorage.getItem("token")
+          ? (
+            <Button
+              onClick={() => savePost(props.id)}
+              disabled={props.isSavedPost}>
+                {props.isSavedPost ? "Saved" : "Save"}
+            </Button>
+          ) : null
+        }
       </CardActions>
     </Card>
   );
