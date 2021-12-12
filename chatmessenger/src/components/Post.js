@@ -10,8 +10,6 @@ import {
 } from "@material-ui/core";
 import { getLikedPosts, getSavedPosts } from "../utils/utils";
 
-
-
 const useStyles = makeStyles((theme) => ({
   card: {
     marginBottom: theme.spacing(5),
@@ -19,8 +17,9 @@ const useStyles = makeStyles((theme) => ({
   media: {},
 }));
 
+
 const Post = props => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   async function savePost(postID) {
     const response = await fetch("http://localhost:1337/api/save-post", {
@@ -56,6 +55,22 @@ const Post = props => {
     if (data.status === "ok") {
       getLikedPosts(props.setLikedPosts)
     }
+  }
+
+  async function awardPost(postID) {
+    await fetch("http://localhost:1337/api/award-post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        postID: postID,
+      }),
+    }).then(res => res.json())
+    .then(data => {
+      window.location.href = data.url
+    })   
   }
 
   return (
@@ -94,6 +109,9 @@ const Post = props => {
             </Button>
           ) : null
         }
+        <Button onClick={() => awardPost(props.id)} >
+          Award
+        </Button>
       </CardActions>
     </Card>
   );
