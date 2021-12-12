@@ -12,6 +12,7 @@ import Filter from "../components/Filter";
 
 const Dashboard = () => {  
   const [posts, setPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([])
   const [savedPosts, setSavedPosts] = useState([])
   const [authorFilterValue, setAuthorFilterValue] = useState("")
   const [category, setCategory] = useState("")
@@ -29,7 +30,9 @@ const Dashboard = () => {
             authorFilterValue={authorFilterValue}
             posts={posts}
             setPosts={setPosts}
+            likedPostIDs={likedPosts.map(post => post._id)}
             savedPostIDs={savedPosts.map(post => post._id)}
+            setLikedPosts={setLikedPosts}
             setSavedPosts={setSavedPosts}
             category={category} />
         </Grid>

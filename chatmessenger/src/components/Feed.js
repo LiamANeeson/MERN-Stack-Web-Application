@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = ({authorFilterValue, category, posts, setPosts, savedPostIDs, setSavedPosts}) => {
+const Feed = ({authorFilterValue, category, posts, setPosts, savedPostIDs, setSavedPosts, likedPostIDs, setLikedPosts}) => {
   const classes = useStyles()
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Feed = ({authorFilterValue, category, posts, setPosts, savedPostIDs, setSa
       return posts
     }
   }
-  console.log(getFilteredPosts())
+  
   return (
     <Container className={classes.container}>
       {
@@ -38,6 +38,8 @@ const Feed = ({authorFilterValue, category, posts, setPosts, savedPostIDs, setSa
             id={post._id}
             title={post.title}
             author={post.author} text={post.text}
+            isLikedPost={likedPostIDs.includes(post._id)}
+            setLikedPosts={setLikedPosts}
             isSavedPost={savedPostIDs.includes(post._id)}
             setSavedPosts={setSavedPosts}
             getPostsByCategory={getPostsByCategory} />
