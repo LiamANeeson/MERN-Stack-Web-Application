@@ -2,13 +2,12 @@ import {
     alpha,
     AppBar,
     Avatar,
-    Badge,
     InputBase,
     makeStyles,
     Toolbar,
     Typography,
   } from "@material-ui/core";
-  import { Cancel, Mail, Notifications, Search } from "@material-ui/icons";
+  import { Cancel, Search } from "@material-ui/icons";
   import { useState, useEffect } from "react";
   import axios from 'axios'
   
@@ -112,12 +111,6 @@ import {
               className={classes.searchButton}
               onClick={() => setOpen(true)}
             />
-            <Badge badgeContent={4} color="secondary" className={classes.badge}>
-              <Mail />
-            </Badge>
-            <Badge badgeContent={2} color="secondary" className={classes.badge}>
-              <Notifications />
-            </Badge>
             {
               localStorage.getItem('username')
               ? (
