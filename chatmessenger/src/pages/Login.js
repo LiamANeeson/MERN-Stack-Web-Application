@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { parseJwt } from '../utils/utils'
+import Navbar from '../components/Navbar'
 
 function App() {
   const navigate = useNavigate()
@@ -40,6 +41,7 @@ function App() {
 
   return (
     <div>
+      <Navbar />
       <h1>Log in</h1>
       <form onSubmit={loginUser}>
         <input
