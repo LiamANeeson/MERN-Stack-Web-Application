@@ -71,6 +71,7 @@ import {
     const [open, setOpen] = useState(false);
     const classes = useStyles({ open });
     const [searchTerm, setSearchTerm] = useState('')
+    const [username, setUsername] = useState(localStorage.getItem('username'))
 
     useEffect(() => {
       if (searchTerm) {
@@ -85,8 +86,6 @@ import {
                   alert('Error retrieving data!!!')
               }
           })
-      } else{
-        props.getPosts(props.setPosts)
       }
   }, [searchTerm])
 
@@ -120,9 +119,14 @@ import {
             <Badge badgeContent={2} color="secondary" className={classes.badge}>
               <Notifications />
             </Badge>
-            <Avatar>
-              {localStorage.getItem('username').charAt(0)}
-            </Avatar>
+            {
+              localStorage.getItem('username')
+              ? (
+                <Avatar>
+                  {localStorage.getItem('username').charAt(0)}
+                </Avatar>
+              ) : null
+            }
           </div>
         </Toolbar>
       </AppBar>

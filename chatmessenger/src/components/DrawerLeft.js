@@ -60,10 +60,15 @@ const DrawerLeft = ({setCategory, setPosts}) => {
         <Settings />
         <Typography className={classes.text}>Settings</Typography>
       </div>
-      <div className={classes.item} onClick={logout}>
-        <ExitToApp />
-        <Typography className={classes.text}>Logout</Typography>
-      </div>
+      {
+        localStorage.getItem('token')
+        ? (
+          <div className={classes.item} onClick={logout}>
+            <ExitToApp />
+            <Typography className={classes.text}>Logout</Typography>
+          </div>
+        ) : null
+      }
     </Container>
   );
 };

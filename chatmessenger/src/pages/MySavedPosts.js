@@ -14,8 +14,16 @@ const MySavedPosts = ({savedPosts, setSavedPosts}) => {
     const classes = useStyles();
 
     useEffect(() => {
-        if (!savedPosts.length) getSavedPosts(setSavedPosts)
+        if (!savedPosts.length && localStorage.getItem('token')) getSavedPosts(setSavedPosts)
     }, [savedPosts])
+
+    const getNoSavedPostsText = () => {
+        if (localStorage.getItem('token')) {
+            return <Typography variant="body2">No posts to display</Typography>
+        } else {
+            return  <Typography variant="body2">Please log in to see saved posts.</Typography>
+        }
+    }
 
     return (
         <div>
@@ -29,7 +37,7 @@ const MySavedPosts = ({savedPosts, setSavedPosts}) => {
                         <p>{post.text}</p>
                     </div>
                 ))
-                : <h3>No posts to display</h3>
+                : getNoSavedPostsText()
             }
         </div>
     )

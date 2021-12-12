@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Container, makeStyles, Typography } from "@material-ui/core";
 import Post from "./Post";
-import { getPosts, getPostsByCategory } from '../utils/utils';
+import { getLikedPosts, getPosts, getPostsByCategory } from '../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -17,6 +17,12 @@ const Feed = ({authorFilterValue, category, posts, setPosts, savedPostIDs, setSa
       getPosts(setPosts);
     }
   }, [posts]);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")){
+      getLikedPosts(setPosts);
+    }
+  }, []);
 
   const getFilteredPosts = () => {
     if (authorFilterValue) {
