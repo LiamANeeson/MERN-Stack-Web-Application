@@ -15,6 +15,7 @@ mongoose.connect('mongodb://localhost:27017/mern_assignment')
 
 userRouter.loginRouter(app)
 userRouter.registerRouter(app)
+userRouter.getCurrentUser(app)
 userRouter.getLikedPosts(app)
 userRouter.getSavedPosts(app)
 userRouter.savePost(app)
@@ -64,7 +65,25 @@ app.patch('/api/update', async (req, res) => {
     }
 })
 
-app.get('/api/quote', async (req, res) => {    
+app.post('/api/updatePic', async (req, res) => {
+    const token = req.headers['x-access-token']
+
+    try{
+        const decoded = jwt.verify(token, 'Secret1234!')
+        const email = decoded.email
+        await User.updateOne(
+            {email:email },
+            {$set: {profilePic: req.body.ProfilePicSelected}}
+        )
+
+        return res.json({status: 'ok'})
+    } catch(error) {
+        console.log(error)
+        res.json({ status: 'error', error: 'invalid token'})
+    }
+})
+
+app.get('/api/updatePic', async (req, res) => {    
 
     const token = req.headers['x-access-token']
 
@@ -73,27 +92,7 @@ app.get('/api/quote', async (req, res) => {
     const email = decoded.email
     const user = await User.findOne({email: email })
 
-    return res.json({status:'ok', quote: user.quote })
-    } catch(error) {
-        console.log(error)
-        res.json({ status: 'error', error: 'invalid token'})
-    }
-
-})
-
-app.post('/api/quote', async (req, res) => {    
-
-    const token = req.headers['x-access-token']
-
-    try {
-    const decoded = jwt.verify(token, 'Secret1234!')
-    const email = decoded.email
-    await User.updateOne(
-        {email: email }, 
-        {$set: {quote: req.body.quote}}
-    )
-    
-    return res.json({status:'ok' })
+    return res.json({status:'ok', profilePic: user.profilePic })
     } catch(error) {
         console.log(error)
         res.json({ status: 'error', error: 'invalid token'})

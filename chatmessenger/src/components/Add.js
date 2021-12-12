@@ -5,7 +5,6 @@ import {
   FormControlLabel,
   FormLabel,
   makeStyles,
-  MenuItem,
   Modal,
   Radio,
   RadioGroup,

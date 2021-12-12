@@ -15,7 +15,7 @@ const MySavedPosts = ({savedPosts, setSavedPosts}) => {
 
     useEffect(() => {
         if (!savedPosts.length && localStorage.getItem('token')) getSavedPosts(setSavedPosts)
-    }, [savedPosts])
+    }, [savedPosts, setSavedPosts])
 
     const getNoSavedPostsText = () => {
         if (localStorage.getItem('token')) {

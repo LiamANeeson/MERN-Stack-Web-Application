@@ -71,7 +71,6 @@ import {
     const [open, setOpen] = useState(false);
     const classes = useStyles({ open });
     const [searchTerm, setSearchTerm] = useState('')
-    const [username, setUsername] = useState(localStorage.getItem('username'))
 
     useEffect(() => {
       if (searchTerm) {
@@ -87,7 +86,7 @@ import {
               }
           })
       }
-  }, [searchTerm])
+  }, [searchTerm, props])
 
     return (
       <AppBar position="fixed">

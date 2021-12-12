@@ -35,26 +35,7 @@ export const getPosts = (callbackFunction) => {
 };
 
 export async function getLikedPosts(callbackFunction) {
-  const response = await fetch('http://localhost:1337/api/liked-posts', {
-    method:'GET',
-    headers: {
-        'Content-Type': 'application/json', 
-        'x-access-token': localStorage.getItem('token'),
-    },
-  }).then(res => {
-    console.log(res)
-  }).catch(err => {
-    console.log(err)
-    callbackFunction([])
-  })
-
-  // const data = await response.json()
-  // console.log(data)
-  // callbackFunction(data.likedPosts)
-}
-
-export async function getSavedPosts(callbackFunction) {
-  const response = await fetch('http://localhost:1337/api/saved-posts', {
+  await fetch('http://localhost:1337/api/liked-posts', {
     method:'GET',
     headers: {
         'Content-Type': 'application/json', 
@@ -63,13 +44,28 @@ export async function getSavedPosts(callbackFunction) {
   }).then(res => {
     console.log(res)
     const data = res.json()
-    callbackFunction(data.savedPosts)
+    if ("posts" in data) callbackFunction(data.posts)
   }).catch(err => {
     console.log(err)
     callbackFunction([])
   })
-  // const data = await response.json()
-  // callbackFunction(data.savedPosts)
+}
+
+export async function getSavedPosts(callbackFunction) {
+  await fetch('http://localhost:1337/api/saved-posts', {
+    method:'GET',
+    headers: {
+        'Content-Type': 'application/json', 
+        'x-access-token': localStorage.getItem('token'),
+    },
+  }).then(res => {
+    console.log(res)
+    const data = res.json()
+    if ("savedPosts" in data) callbackFunction(data.savedPosts)
+  }).catch(err => {
+    console.log(err)
+    callbackFunction([])
+  })
 }
 
 export async function getPostsByCategory(category, callbackFunction) {

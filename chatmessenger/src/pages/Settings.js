@@ -1,15 +1,36 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
-import axios from 'axios'
+import React, { useCallback, useEffect } from 'react'
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { parseJwt } from '../utils/utils'
 
 function Settings() {
     const navigate = useNavigate()
+    const [currentUserData, setCurrentUserData] = useState({})
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
-    const [username, setUsername] = useState(localStorage.getItem('username'))
+
+    const getCurrentUserData = useCallback(async function () {
+        await fetch('http://localhost:1337/api/current-user', {
+            method:'GET',
+            headers: {
+                'Content-Type': 'application/json', 
+                'x-access-token': localStorage.getItem('token'),
+            },
+        }).then(res => res.json())
+        .then(data => {
+            console.log(data)
+            setCurrentUserData(data.user)
+        }).catch(err => {
+            console.log(err)
+            setCurrentUserData({})
+        })
+    }, [])
+
+    useEffect(() => {
+        getCurrentUserData()
+    }, [getCurrentUserData, setCurrentUserData])
+
     // Delete Account
     async function deleteAccount(event) {
         event.preventDefault()
@@ -57,7 +78,6 @@ function Settings() {
         const data = await req.json()
         if(data.status === 'ok') {
             localStorage.setItem('username', parseJwt(data.user).name)
-            setUsername(parseJwt(data.user).name)
             localStorage.setItem('token', data.user)
             alert('Profile Updated')
             navigate('/dashboard')
@@ -68,6 +88,8 @@ function Settings() {
     
     return (
         <div>
+            <h1>My profile</h1>
+            {'profilePic' in currentUserData ? <img alt="profilepic" src={currentUserData.profilePic} /> : null}
             <h1>Delete or Update Your Profile Information</h1>
             <h1>Delete</h1>
             <button onClick={deleteAccount}>Delete your profile</button>
