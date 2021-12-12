@@ -12,7 +12,7 @@ import Filter from "../components/Filter";
 import Alert from "@material-ui/lab/Alert";
 
 
-const Dashboard = props => {  
+const Dashboard = () => {  
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([])
   const [savedPosts, setSavedPosts] = useState([])

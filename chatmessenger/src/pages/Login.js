@@ -2,11 +2,22 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { parseJwt } from '../utils/utils'
 import Navbar from '../components/Navbar'
+import { Button, Grid, Input, makeStyles, Typography } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    paddingTop: theme.spacing(10),
+  },
+  formElement: {
+    marginTop: theme.spacing(3),
+  }
+}));
 
 function App() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const classes = useStyles()
 
     async function loginUser(event) {
       event.preventDefault()
@@ -42,25 +53,43 @@ function App() {
   return (
     <div>
       <Navbar />
-      <h1>Log in</h1>
-      <form onSubmit={loginUser}>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          placeholder="Email"
-        />
-        <br/>
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          placeholder="Password"
-        />
-        <br/>
-        <input type="submit" value="Login"/>
-      </form>
-      <h1>Not Signed Up <button onClick={navToRegister}>Reigster</button></h1>
+      <Grid container
+  direction="column"
+  alignItems="center"
+  justify="center"
+  className={classes.container} >
+        <Grid item>
+          <Typography variant="h3">Log in</Typography>
+        </Grid>
+        <form onSubmit={loginUser} id="loginForm">
+          <Grid item className={classes.formElement}>
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              placeholder="Email"
+            />
+          </Grid>
+          <Grid item className={classes.formElement}>
+            <Input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              placeholder="Password"
+            />
+          </Grid>
+          <Grid item className={classes.formElement}>
+            <Button type="submit" variant="contained" value="Log In">
+              Log In
+            </Button>
+          </Grid>
+        </form>
+        <Grid item className={classes.formElement}>
+          <Typography variant="h5">
+            <Button variant="outlined" onClick={navToRegister}>Sign up instead</Button>
+          </Typography>
+        </Grid>
+      </Grid>
     </div>
   );
 }
