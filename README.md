@@ -11,6 +11,7 @@ Once you've cloned from the github repository, you should be able to get the fro
 cd chatmessenger
 npm i
 npm start
+npm test
 ```
 
 ## Back-end setup
