@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'
+
 import { Container, makeStyles, Typography } from "@material-ui/core";
 import { Home, People, Settings, ExitToApp } from "@material-ui/icons";
 import { allowedCategories, getPostsByCategory } from '../utils/utils';
@@ -34,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const DrawerLeft = ({setCategory, setPosts}) => {
   const classes = useStyles()
+  const navigate = useNavigate()
 
   const handleCategoryChange = (category) => {
     setCategory(category)
@@ -56,7 +59,7 @@ const DrawerLeft = ({setCategory, setPosts}) => {
           <Typography className={classes.text}>{category}</Typography>
         </div>
       ))}
-      <div className={classes.item}>
+      <div className={classes.item} onClick={() => navigate("/settings")}>
         <Settings />
         <Typography className={classes.text}>Settings</Typography>
       </div>

@@ -1,6 +1,8 @@
+import { Typography } from '@material-ui/core';
 import React, { useCallback, useEffect } from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
+import Navbar from '../components/Navbar';
 import { parseJwt } from '../utils/utils'
 
 function Settings() {
@@ -88,6 +90,8 @@ function Settings() {
     
     return (
         <div>
+            <Navbar />
+            <Typography variant="h3">Profile</Typography>
             <h1>My profile</h1>
             {'profilePic' in currentUserData ? <img alt="profilepic" src={currentUserData.profilePic} /> : null}
             <h1>Delete or Update Your Profile Information</h1>
