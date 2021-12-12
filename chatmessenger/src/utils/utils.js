@@ -41,10 +41,9 @@ export async function getLikedPosts(callbackFunction) {
         'Content-Type': 'application/json', 
         'x-access-token': localStorage.getItem('token'),
     },
-  }).then(res => {
-    console.log(res)
-    const data = res.json()
-    if ("posts" in data) callbackFunction(data.posts)
+  }).then(res => res.json())
+  .then(data => {
+    if ("likedPosts" in data) callbackFunction(data.likedPosts)
   }).catch(err => {
     console.log(err)
     callbackFunction([])
@@ -58,9 +57,8 @@ export async function getSavedPosts(callbackFunction) {
         'Content-Type': 'application/json', 
         'x-access-token': localStorage.getItem('token'),
     },
-  }).then(res => {
-    console.log(res)
-    const data = res.json()
+  }).then(res => res.json())
+  .then(data => {
     if ("savedPosts" in data) callbackFunction(data.savedPosts)
   }).catch(err => {
     console.log(err)
