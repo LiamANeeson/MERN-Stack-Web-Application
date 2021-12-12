@@ -16,6 +16,7 @@ const Post = new mongoose.Schema(
         text: {type: String },
         likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user-data' }],
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'user-data' },
+        awardCount: {type: Number},
         category: {type: String, enum: categoriesEnum, unique: false},
     }, { collection: 'post' }
 )

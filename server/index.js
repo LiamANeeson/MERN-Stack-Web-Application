@@ -7,9 +7,15 @@ const User = require('./models/user.model')
 const jwt = require('jsonwebtoken')
 const userRouter = require('./Routes/userRouter')
 const postRouter = require('./Routes/postRouter')
+const stripe = require('stripe')('sk_test_51K5uTyEt5WMsJ772iDlCjsxgH03cwuTC6HxkoOujUISK0Ts41XvYgzXW4wwhAGIU8hBDCqVQV7rfCCoycjvfElMM00pF8aczPz');
 
 app.use(cors())
 app.use(express.json())
+
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    next()
+})
 
 mongoose.connect('mongodb://localhost:27017/mern_assignment')
 
@@ -88,17 +94,31 @@ app.get('/api/updatePic', async (req, res) => {
     const token = req.headers['x-access-token']
 
     try {
-    const decoded = jwt.verify(token, 'Secret1234!')
-    const email = decoded.email
-    const user = await User.findOne({email: email })
+        const decoded = jwt.verify(token, 'Secret1234!')
+        const email = decoded.email
+        const user = await User.findOne({email: email })
 
-    return res.json({status:'ok', profilePic: user.profilePic })
+        return res.json({status:'ok', profilePic: user.profilePic })
     } catch(error) {
         console.log(error)
         res.json({ status: 'error', error: 'invalid token'})
     }
 
 })
+
+app.post('/api/award-post', async (req, res) => {
+    const session = await stripe.checkout.sessions.create({
+        line_items: [
+        {
+            price: 'price_1K5ul7Et5WMsJ772RuM5h7PE',
+            quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: `http://localhost:3000/dashboard?award-status=success`,
+        cancel_url: `http://localhost:3000/dashboard?award-status=fail`,
+    })
+    res.json({url: session.url})
+});
 
 app.listen(1337, () => {
     console.log('Server started on 1337')

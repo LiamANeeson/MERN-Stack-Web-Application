@@ -1,21 +1,25 @@
 import React, { useState } from "react";
+import { useLocation } from 'react-router-dom';
 import MySavedPosts from "./MySavedPosts";
 import Navbar from "../components/Navbar";
 import Add from "../components/Add";
 import DrawerLeft from "../components/DrawerLeft";
 import Rightbar from "../components/Rightbar";
-import { Grid } from "@material-ui/core";
+import { Grid, Snackbar } from "@material-ui/core";
 import Feed from "../components/Feed";
 import { getPosts } from "../utils/utils";
 import Filter from "../components/Filter";
+import Alert from "@material-ui/lab/Alert";
 
 
-const Dashboard = () => {  
+const Dashboard = props => {  
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([])
   const [savedPosts, setSavedPosts] = useState([])
   const [authorFilterValue, setAuthorFilterValue] = useState("")
   const [category, setCategory] = useState("")
+  const location = useLocation();
+  const [openSnackbar, setOpenSnackbar] = useState('search' in location && ["?award-status=success", "?award-status=fail"].includes(location.search));
 
     // consts for profile pic
   const [tempProfilePicSelected, setTempProfilePicSelected] = useState('');
@@ -96,6 +100,17 @@ const Dashboard = () => {
         ? <Add setPosts={setPosts} />
         : null
       }
+      
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert onClose={() => {}} severity={location.search === "?award-status=success" ? "success": "error"}>
+          {location.search === "?award-status=success" ? "Payment successful!": "Payment failed. Please try again."}
+        </Alert>
+      </Snackbar>
      
     </div>
   );
