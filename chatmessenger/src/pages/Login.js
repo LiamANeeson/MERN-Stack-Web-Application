@@ -39,7 +39,6 @@ function App() {
         console.log(parseJwt(data.user))
         localStorage.setItem('username', parseJwt(data.user).name)
         localStorage.setItem('token', data.user)
-        alert('Login successful')
         window.location.href= '/dashboard'
       }
       else{
@@ -54,10 +53,10 @@ function App() {
     <div>
       <Navbar />
       <Grid container
-  direction="column"
-  alignItems="center"
-  justify="center"
-  className={classes.container} >
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        className={classes.container} >
         <Grid item>
           <Typography variant="h3">Log in</Typography>
         </Grid>
@@ -79,7 +78,7 @@ function App() {
             />
           </Grid>
           <Grid item className={classes.formElement}>
-            <Button type="submit" variant="contained" value="Log In">
+            <Button type="submit" variant="contained">
               Log In
             </Button>
           </Grid>

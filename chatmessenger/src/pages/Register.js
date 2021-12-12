@@ -1,12 +1,23 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { Typography } from '@material-ui/core'
+import { Button, Grid, Input, makeStyles, Typography } from '@material-ui/core'
+import Navbar from '../components/Navbar';
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    paddingTop: theme.spacing(10),
+  },
+  formElement: {
+    marginTop: theme.spacing(3),
+  }
+}));
 
 function App() {
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const classes = useStyles()
 
   async function registerUser(event) {
     event.preventDefault()
@@ -36,32 +47,52 @@ function App() {
   
   return (
     <div>
-      <Typography variant="h6">Register</Typography>
-      <form onSubmit={registerUser}>
-          <input 
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            type="text"
-            placeholder="Name" 
-          />
-          <br/>
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            placeholder="Email"
-          />
-          <br/>
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            placeholder="Password"
-          />
-          <br/>
-            <input type="submit"/>
-          </form>
-          <h1>Already a member<button onClick={navToLogin}>Log In</button></h1>
+      <Navbar />
+      <Grid container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        className={classes.container} >
+          <Grid item>
+            <Typography variant="h6">Register</Typography>
+          </Grid>
+          <form onSubmit={registerUser}>
+            <Grid item className={classes.formElement}>
+              <Input 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                placeholder="Name" 
+              />
+            </Grid>
+            <Grid item className={classes.formElement}>
+              <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="Email"
+              />
+            </Grid>
+            <Grid item className={classes.formElement}>
+              <Input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="Password"
+              />
+            </Grid>
+            <Grid item className={classes.formElement}>
+              <Button type="submit" variant="contained">
+                Register
+              </Button>
+            </Grid>
+              </form>
+            <Grid item className={classes.formElement}>
+              <Typography variant="h5">
+                <Button variant="outlined" onClick={navToLogin}>Log in instead</Button>
+              </Typography>
+            </Grid>
+      </Grid>
     </div>
   );
 }
