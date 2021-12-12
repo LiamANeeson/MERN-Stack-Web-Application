@@ -12,11 +12,6 @@ const stripe = require('stripe')('sk_test_51K5uTyEt5WMsJ772iDlCjsxgH03cwuTC6Hxko
 app.use(cors())
 app.use(express.json())
 
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    next()
-})
-
 mongoose.connect('mongodb://localhost:27017/mern_assignment')
 
 userRouter.loginRouter(app)

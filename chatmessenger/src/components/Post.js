@@ -22,7 +22,7 @@ const Post = props => {
   const classes = useStyles()
 
   async function savePost(postID) {
-    const response = await fetch("http://localhost:1337/api/save-post", {
+    await fetch("http://localhost:1337/api/save-post", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,16 +31,14 @@ const Post = props => {
       body: JSON.stringify({
         postID: postID,
       }),
-    });
-
-    const data = await response.json();
-    if (data.status === "ok") {
-      getSavedPosts(props.setSavedPosts)
-    }
+    }).then(res => res.json())
+    .then(data => {
+      if (data.status === "ok") getSavedPosts(props.setSavedPosts)
+    })
   }
 
   async function likePost(postID) {
-    const response = await fetch("http://localhost:1337/api/like-post", {
+    await fetch("http://localhost:1337/api/like-post", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,12 +47,12 @@ const Post = props => {
       body: JSON.stringify({
         postID: postID,
       }),
-    });
-
-    const data = await response.json();
-    if (data.status === "ok") {
-      getLikedPosts(props.setLikedPosts)
-    }
+    }).then(res => res.json())
+    .then(data => {
+      if (data.status === "ok") {
+        getLikedPosts(props.setLikedPosts)
+      }
+    })
   }
 
   async function awardPost(postID) {
