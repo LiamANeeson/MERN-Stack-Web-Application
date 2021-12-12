@@ -59,7 +59,7 @@ const getCurrentUser = async function (req, res) {
     console.log(error);
     return res.json({ status: "error", error: "invalid token" });
   }
-
+ 
   const user = await User.findById(decoded.id);
 
   return res.json({ status: "ok", user: user });

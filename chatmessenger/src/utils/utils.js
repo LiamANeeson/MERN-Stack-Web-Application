@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import axios from "axios";
 import {
   MovieOutlined,
@@ -84,18 +83,6 @@ export const allowedCategories = {
   'Books': {icon: MenuBookOutlined},
   'Podcasts': {icon: PodcastsOutlined},
   'Sports': {icon: SportsTennisOutlined}
-}
-
-export const usePrevious = (value) => {
-  /**
-   * Access previous state...
-   * From https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state
-   */
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
 }
 
 export const logout = () => {
