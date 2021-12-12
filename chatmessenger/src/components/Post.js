@@ -8,7 +8,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { getSavedPosts } from "../utils/utils";
+import { getLikedPosts, getSavedPosts } from "../utils/utils";
 
 
 
@@ -40,6 +40,24 @@ const Post = props => {
     }
   }
 
+  async function likePost(postID) {
+    const response = await fetch("http://localhost:1337/api/like-post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        postID: postID,
+      }),
+    });
+    console.log(response)
+    const data = await response.json();
+    if (data.status === "ok") {
+      getLikedPosts(props.setLikedPosts)
+    }
+  }
+
   return (
     <Card className={classes.card}>
       <CardActionArea>
@@ -57,7 +75,11 @@ const Post = props => {
       </CardActionArea>
       <CardActions>
         <Button>Share</Button>
-        <Button>Like</Button>
+        <Button
+          onClick={() => likePost(props.id)}
+          disabled={props.isLikedPost}>
+            {props.isLikedPost ? "Liked" : "Like"}
+        </Button>
         <Button
           onClick={() => savePost(props.id)}
           disabled={props.isSavedPost}>

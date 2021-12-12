@@ -34,6 +34,20 @@ export const getPosts = (callbackFunction) => {
     });
 };
 
+export async function getLikedPosts(callbackFunction) {
+  const response = await fetch('http://localhost:1337/api/liked-posts', {
+      method:'GET',
+      headers: {
+          'Content-Type': 'application/json', 
+          'x-access-token': localStorage.getItem('token'),
+      },
+  })
+
+  const data = await response.json()
+  console.log(data)
+  callbackFunction(data.likedPosts)
+}
+
 export async function getSavedPosts(callbackFunction) {
   const response = await fetch('http://localhost:1337/api/saved-posts', {
       method:'GET',

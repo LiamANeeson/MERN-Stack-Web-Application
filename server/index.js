@@ -15,6 +15,7 @@ mongoose.connect('mongodb://localhost:27017/mern_assignment')
 
 userRouter.loginRouter(app)
 userRouter.registerRouter(app)
+userRouter.getLikedPosts(app)
 userRouter.getSavedPosts(app)
 userRouter.savePost(app)
 postRouter.createPost(app)
